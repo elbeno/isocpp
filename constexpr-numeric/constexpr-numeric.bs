@@ -1,0 +1,82 @@
+<pre class='metadata'>
+Title: constexpr for &lt;numeric&gt;
+Status: D
+ED: https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html
+Shortname: Dxxx
+Level: 0
+Date: 2019-03-17
+Editor: Ben Deane, ben at elbeno dot com
+Group: wg21
+Audience: LEWG
+Markup Shorthands: markdown yes
+Default Highlight: C++
+Abstract: We have made many algorithms <code>constexpr</code> for C++20, but we seem to have forgotten the algorithms in <code>&lt;numeric&gt;</code>.
+</pre>
+
+<pre class="biblio">
+{
+    "P0879": {
+        "authors": ["Antony Polukhin"],
+        "title": "Constexpr for swap and swap related functions",
+        "href": "https://wg21.link/P0879",
+        "date": "2017-12-29"
+    }
+}
+</pre>
+
+<style>
+.ins, ins, ins *, span.ins, span.ins * {
+  background-color: rgb(200, 250, 200);
+  color: rgb(0, 136, 0);
+  text-decoration: none;
+}
+
+.del, del, del *, span.del, span.del * {
+  background-color: rgb(250, 200, 200);
+  color: rgb(255, 0, 0);
+  text-decoration: line-through;
+  text-decoration-color: rgb(255, 0, 0);
+}
+</style>
+
+# Motivation # {#motivation}
+
+We have added `constexpr` to many parts of the standard library for C++20.
+
+Notably, [[P0879]] *Constexpr for swap and swap-related functions* added
+`constexpr` to all functions in `<algorithm>` except `shuffle`, `sample`,
+`stable_sort`, `stable_partition`, `inplace_merge`, and functions accepting an
+`ExecutionPolicy`.
+
+However, there are useful algorithms in `<numeric>` that we seem to have forgotten to add
+`constexpr` to.
+
+# Assumptions # {#assumptions}
+
+This proposal makes the same assumptions as [[P0879]]:
+
+- if an algorithm uses compiler intrinsics, then those intrinsics could be made `constexpr` by compiler vendors.
+- if an algorithm uses assembly optimization, then that assembly could be turned into a `constexpr` compiler intrinsic.
+- if an algorithm uses external functions, then those functions could be made `inline` and marked `constexpr` or could be replaced with intrinsics.
+- modern compilers are good at code optimization, so a decently small amount of algorithms use assembly or intrinsics.
+
+# Algorithms in `<numeric>` that were apparently forgotten about # {#forgotten}
+
+This proposal is to add `constexpr` to the following function templates in `<numeric>`, excepting the function templates that accept an `ExecutionPolicy`.
+
+- `accumulate`
+- `reduce`
+- `inner_product`
+- `iota`
+- `transform_reduce`
+- `partial_sum`
+- `exclusive_scan`
+- `inclusive_scan`
+- `transform_exclusive_scan`
+- `transform_inclusive_scan`
+- `adjacent_difference`
+- `iota`
+
+# Proposed wording relative to N4810 # {#wording}
+
+TBD
