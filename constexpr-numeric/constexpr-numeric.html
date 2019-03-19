@@ -1230,7 +1230,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 8ac92da89bb2253e0da87e20a9b9caa745f5f5b6" name="generator">
   <link href="https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html" rel="canonical">
   <link href="https://isocpp.org/favicon.ico" rel="icon">
-  <meta content="23f6c35cd5d06526db563f5216506eddd9f59262" name="document-revision">
+  <meta content="6a746b92cbaaa0d162f25f192a1eaa0303bc0597" name="document-revision">
 <style>
 .ins, ins, ins *, span.ins, span.ins * {
   background-color: rgb(200, 250, 200);
@@ -1473,15 +1473,17 @@ pre .property::before, pre .property::after {
   </div>
   <div class="p-summary" data-fill-with="abstract">
    <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
-   <p>We have made many algorithms <code class="highlight"><c- k>constexpr</c-></code> for C++20, but we seem to have forgotten the algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code>.</p>
+   <p>We have made many algorithms <code class="highlight"><c- k>constexpr</c-></code> for C++20, but we seem to have overlooked the algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code>.</p>
   </div>
   <nav data-fill-with="table-of-contents" id="toc">
    <h2 class="no-num no-toc no-ref" id="contents">Table of Contents</h2>
    <ol class="toc" role="directory">
     <li><a href="#motivation"><span class="secno">1</span> <span class="content">Motivation</span></a>
     <li><a href="#assumptions"><span class="secno">2</span> <span class="content">Assumptions</span></a>
-    <li><a href="#forgotten"><span class="secno">3</span> <span class="content">Algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that were apparently forgotten about</span></a>
+    <li><a href="#overlooked"><span class="secno">3</span> <span class="content">Algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that were apparently overlooked</span></a>
     <li><a href="#wording"><span class="secno">4</span> <span class="content">Proposed wording relative to N4810</span></a>
+    <li><a href="#featuretesting"><span class="secno">5</span> <span class="content">Feature testing macro</span></a>
+    <li><a href="#thanks"><span class="secno">6</span> <span class="content">Thanks</span></a>
     <li>
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ol class="toc">
@@ -1493,7 +1495,9 @@ pre .property::before, pre .property::after {
    <h2 class="heading settled" data-level="1" id="motivation"><span class="secno">1. </span><span class="content">Motivation</span><a class="self-link" href="#motivation"></a></h2>
    <p>We have added <code class="highlight"><c- k>constexpr</c-></code> to many parts of the standard library for C++20.</p>
    <p>Notably, <a data-link-type="biblio" href="#biblio-p0879">[P0879]</a> <em>Constexpr for swap and swap-related functions</em> added <code class="highlight"><c- k>constexpr</c-></code> to all functions in <code class="highlight"><c- o>&lt;</c-><c- n>algorithm</c-><c- o>></c-></code> except <code class="highlight"><c- n>shuffle</c-></code>, <code class="highlight"><c- n>sample</c-></code>, <code class="highlight"><c- n>stable_sort</c-></code>, <code class="highlight"><c- n>stable_partition</c-></code>, <code class="highlight"><c- n>inplace_merge</c-></code>, and functions accepting an <code class="highlight"><c- n>ExecutionPolicy</c-></code>.</p>
-   <p>However, there are useful algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that we seem to have forgotten to add <code class="highlight"><c- k>constexpr</c-></code> to.</p>
+   <p>I believe LEWG’s design intent is that the non-allocating, non-parallel
+algorithms be <code class="highlight"><c- k>constexpr</c-></code>. However, there are algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that
+have been overlooked.</p>
    <h2 class="heading settled" data-level="2" id="assumptions"><span class="secno">2. </span><span class="content">Assumptions</span><a class="self-link" href="#assumptions"></a></h2>
    <p>This proposal makes the same assumptions as <a data-link-type="biblio" href="#biblio-p0879">[P0879]</a>, <em>viz.</em>:</p>
    <ul>
@@ -1503,10 +1507,8 @@ pre .property::before, pre .property::after {
      <p>if an algorithm uses assembly optimization, then that assembly could be turned into a <code class="highlight"><c- k>constexpr</c-></code> compiler intrinsic.</p>
     <li data-md>
      <p>if an algorithm uses external functions, then those functions could be made <code class="highlight"><c- kr>inline</c-></code> and marked <code class="highlight"><c- k>constexpr</c-></code> or could be replaced with intrinsics.</p>
-    <li data-md>
-     <p>modern compilers are good at code optimization, so a decently small amount of algorithms use assembly or intrinsics.</p>
    </ul>
-   <h2 class="heading settled" data-level="3" id="forgotten"><span class="secno">3. </span><span class="content">Algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that were apparently forgotten about</span><a class="self-link" href="#forgotten"></a></h2>
+   <h2 class="heading settled" data-level="3" id="overlooked"><span class="secno">3. </span><span class="content">Algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that were apparently overlooked</span><a class="self-link" href="#overlooked"></a></h2>
    <p>This proposal is to add <code class="highlight"><c- k>constexpr</c-></code> to the following function templates in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code>, excepting the function templates that accept an <code class="highlight"><c- n>ExecutionPolicy</c-></code>.</p>
    <ul>
     <li data-md>
@@ -1536,85 +1538,88 @@ pre .property::before, pre .property::after {
    </ul>
    <h2 class="heading settled" data-level="4" id="wording"><span class="secno">4. </span><span class="content">Proposed wording relative to N4810</span><a class="self-link" href="#wording"></a></h2>
    <p>Exactly as one would expect: add <code class="highlight"><c- k>constexpr</c-></code> to the function templates listed above where they do not accept an <code class="highlight"><c- n>ExecutionPolicy</c-></code>.</p>
-   <p>
-    Change <em>Header</em> 
-    <tt>&lt;numeric></tt>
-     <em>synopsis</em>, 25.8 [numeric.ops.overview] as indicated:
-   </p>
+   <ul>
+    <li data-md>
+     <p>
+      Change <em>Header</em> 
+      <tt>&lt;numeric></tt>
+       <em>synopsis</em>, 25.8 [numeric.ops.overview] as indicated:
+     </p>
+   </ul>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- k>typename</c-> <c- n>iterator_traits</c-><c- o>&lt;</c-><c- n>InputIterator</c-><c- o>>::</c-><c- n>value_type</c->
+  <ins><c- k>constexpr</c-></ins> <c- k>typename</c-> <c- n>iterator_traits</c-><inputiterator><c- o>::</c-><c- n>value_type</c->
     <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
-</pre>
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
+</inputiterator></pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>inner_product</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>inner_product</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                             <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation2</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>inner_product</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>inner_product</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                             <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c->
                             <c- n>BinaryOperation1</c-> <c- n>binary_op1</c-><c- p>,</c->
                             <c- n>BinaryOperation2</c-> <c- n>binary_op2</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                                <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c->
                                <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation2</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                                <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c->
                                <c- n>T</c-> <c- n>init</c-><c- p>,</c->
                                <c- n>BinaryOperation1</c-> <c- n>binary_op1</c-><c- p>,</c->
                                <c- n>BinaryOperation2</c-> <c- n>binary_op2</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                <c- n>T</c-> <c- n>init</c-><c- p>,</c->
                                <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c-> <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>partial_sum</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>partial_sum</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                        <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                        <c- n>OutputIterator</c-> <c- n>result</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>partial_sum</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>partial_sum</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                        <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                        <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                        <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                           <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                           <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                           <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                           <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
-<c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>transform_exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+         <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>transform_exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                     <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                                     <c- n>T</c-> <c- n>init</c-><c- p>,</c->
                                                     <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c->
@@ -1622,30 +1627,30 @@ pre .property::before, pre .property::after {
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>transform_inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>transform_inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                     <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                                     <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c->
                                                     <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>transform_inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>transform_inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                     <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                                     <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c->
                                                     <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>,</c->
                                                     <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>adjacent_difference</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>adjacent_difference</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                                <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                <c- n>OutputIterator</c-> <c- n>result</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- n>OutputIterator</c-> <c- n>adjacent_difference</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>adjacent_difference</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                                <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                                <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
 </pre>
 <pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>ForwardIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <c- k>constexpr</c-> <c- b>void</c-> <c- n>iota</c-><c- p>(</c-><c- n>ForwardIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>ForwardIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>value</c-><c- p>);</c->
+  <ins><c- k>constexpr</c-></ins> <c- b>void</c-> <c- n>iota</c-><c- p>(</c-><c- n>ForwardIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>ForwardIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>value</c-><c- p>);</c->
 </pre>
    <ul>
     <li data-md>

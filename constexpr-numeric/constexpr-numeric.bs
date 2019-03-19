@@ -3,14 +3,14 @@ Title: constexpr for &lt;numeric&gt;
 Status: D
 ED: https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html
 Shortname: Dxxx
-Level: 0
+Revision: 0
 Date: 2019-03-17
 Editor: Ben Deane, ben at elbeno dot com
 Group: wg21
 Audience: LEWG
 Markup Shorthands: markdown yes
-Default Highlight: C++
-Abstract: We have made many algorithms <code>constexpr</code> for C++20, but we seem to have forgotten the algorithms in <code>&lt;numeric&gt;</code>.
+Default Highlight: c++
+Abstract: We have made many algorithms <code>constexpr</code> for C++20, but we seem to have overlooked the algorithms in <code>&lt;numeric&gt;</code>.
 </pre>
 
 <pre class="biblio">
@@ -48,8 +48,9 @@ Notably, [[P0879]] *Constexpr for swap and swap-related functions* added
 `stable_sort`, `stable_partition`, `inplace_merge`, and functions accepting an
 `ExecutionPolicy`.
 
-However, there are useful algorithms in `<numeric>` that we seem to have forgotten to add
-`constexpr` to.
+I believe LEWG's design intent is that the non-allocating, non-parallel
+algorithms be `constexpr`. However, there are algorithms in `<numeric>` that
+have been overlooked.
 
 # Assumptions # {#assumptions}
 
@@ -58,9 +59,8 @@ This proposal makes the same assumptions as [[P0879]], *viz.*:
 - if an algorithm uses compiler intrinsics, then those intrinsics could be made `constexpr` by compiler vendors.
 - if an algorithm uses assembly optimization, then that assembly could be turned into a `constexpr` compiler intrinsic.
 - if an algorithm uses external functions, then those functions could be made `inline` and marked `constexpr` or could be replaced with intrinsics.
-- modern compilers are good at code optimization, so a decently small amount of algorithms use assembly or intrinsics.
 
-# Algorithms in `<numeric>` that were apparently forgotten about # {#forgotten}
+# Algorithms in `<numeric>` that were apparently overlooked # {#overlooked}
 
 This proposal is to add `constexpr` to the following function templates in `<numeric>`, excepting the function templates that accept an `ExecutionPolicy`.
 
@@ -82,125 +82,135 @@ This proposal is to add `constexpr` to the following function templates in `<num
 Exactly as one would expect: add `constexpr` to the function templates listed above where they do not accept an `ExecutionPolicy`.
 
 
-Change *Header* <tt>&lt;numeric&gt;</tt> *synopsis*, 25.8 [numeric.ops.overview] as indicated:
-```
-template<class InputIterator, class T>
-  constexpr T accumulate(InputIterator first, InputIterator last, T init);
-template<class InputIterator, class T, class BinaryOperation>
-  constexpr T accumulate(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
-```
-```
-template<class InputIterator>
-  constexpr typename iterator_traits<InputIterator>::value_type
-    reduce(InputIterator first, InputIterator last);
-template<class InputIterator, class T>
-  constexpr T reduce(InputIterator first, InputIterator last, T init);
-template<class InputIterator, class T, class BinaryOperation>
-  constexpr T reduce(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
-```
+- Change *Header* <tt>&lt;numeric&gt;</tt> *synopsis*, 25.8 [numeric.ops.overview] as indicated:
 
-```
-template<class InputIterator1, class InputIterator2, class T>
-  constexpr T inner_product(InputIterator1 first1, InputIterator1 last1,
+<pre>
+template&lt;class InputIterator, class T&gt;
+  <ins>constexpr</ins> T accumulate(InputIterator first, InputIterator last, T init);
+template&lt;class InputIterator, class T, class BinaryOperation&gt;
+  <ins>constexpr</ins> T accumulate(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
+</pre>
+
+<pre>
+template&lt;class InputIterator&gt;
+  <ins>constexpr</ins> typename iterator_traits<InputIterator>::value_type
+    reduce(InputIterator first, InputIterator last);
+template&lt;class InputIterator, class T&gt;
+  <ins>constexpr</ins> T reduce(InputIterator first, InputIterator last, T init);
+template&lt;class InputIterator, class T, class BinaryOperation&gt;
+  <ins>constexpr</ins> T reduce(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
+</pre>
+
+<pre>
+template&lt;class InputIterator1, class InputIterator2, class T&gt;
+  <ins>constexpr</ins> T inner_product(InputIterator1 first1, InputIterator1 last1,
                             InputIterator2 first2, T init);
-template<class InputIterator1, class InputIterator2, class T,
-         class BinaryOperation1, class BinaryOperation2>
-  constexpr T inner_product(InputIterator1 first1, InputIterator1 last1,
+template&lt;class InputIterator1, class InputIterator2, class T,
+         class BinaryOperation1, class BinaryOperation2&gt;
+  <ins>constexpr</ins> T inner_product(InputIterator1 first1, InputIterator1 last1,
                             InputIterator2 first2, T init,
                             BinaryOperation1 binary_op1,
                             BinaryOperation2 binary_op2);
-```
-```
-template<class InputIterator1, class InputIterator2, class T>
-  constexpr T transform_reduce(InputIterator1 first1, InputIterator1 last1,
+</pre>
+
+<pre>
+template&lt;class InputIterator1, class InputIterator2, class T&gt;
+  <ins>constexpr</ins> T transform_reduce(InputIterator1 first1, InputIterator1 last1,
                                InputIterator2 first2,
                                T init);
-template<class InputIterator1, class InputIterator2, class T,
-         class BinaryOperation1, class BinaryOperation2>
-  constexpr T transform_reduce(InputIterator1 first1, InputIterator1 last1,
+template&lt;class InputIterator1, class InputIterator2, class T,
+         class BinaryOperation1, class BinaryOperation2&gt;
+  <ins>constexpr</ins> T transform_reduce(InputIterator1 first1, InputIterator1 last1,
                                InputIterator2 first2,
                                T init,
                                BinaryOperation1 binary_op1,
                                BinaryOperation2 binary_op2);
-template<class InputIterator, class T,
-         class BinaryOperation, class UnaryOperation>
-  constexpr T transform_reduce(InputIterator first, InputIterator last,
+template&lt;class InputIterator, class T,
+         class BinaryOperation, class UnaryOperation&gt;
+  <ins>constexpr</ins> T transform_reduce(InputIterator first, InputIterator last,
                                T init,
                                BinaryOperation binary_op, UnaryOperation unary_op);
-```
-```
-template<class InputIterator, class OutputIterator>
-  constexpr OutputIterator partial_sum(InputIterator first,
+</pre>
+
+<pre>
+template&lt;class InputIterator, class OutputIterator&gt;
+  <ins>constexpr</ins> OutputIterator partial_sum(InputIterator first,
                                        InputIterator last,
                                        OutputIterator result);
-template<class InputIterator, class OutputIterator, class BinaryOperation>
-  constexpr OutputIterator partial_sum(InputIterator first,
+template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
+  <ins>constexpr</ins> OutputIterator partial_sum(InputIterator first,
                                        InputIterator last,
                                        OutputIterator result,
                                        BinaryOperation binary_op);
-```
-```
-template<class InputIterator, class OutputIterator, class T>
-  constexpr OutputIterator exclusive_scan(InputIterator first, InputIterator last,
+</pre>
+
+<pre>
+template&lt;class InputIterator, class OutputIterator, class T&gt;
+  <ins>constexpr</ins> OutputIterator exclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
                                           T init);
-template<class InputIterator, class OutputIterator, class T, class BinaryOperation>
-  constexpr OutputIterator exclusive_scan(InputIterator first, InputIterator last,
+template&lt;class InputIterator, class OutputIterator, class T, class BinaryOperation&gt;
+  <ins>constexpr</ins> OutputIterator exclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
                                           T init, BinaryOperation binary_op);
-```
-```
-template<class InputIterator, class OutputIterator>
-  constexpr OutputIterator inclusive_scan(InputIterator first, InputIterator last,
+</pre>
+
+<pre>
+template&lt;class InputIterator, class OutputIterator&gt;
+  <ins>constexpr</ins> OutputIterator inclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result);
-template<class InputIterator, class OutputIterator, class BinaryOperation>
-  constexpr OutputIterator inclusive_scan(InputIterator first, InputIterator last,
+template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
+  <ins>constexpr</ins> OutputIterator inclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
                                           BinaryOperation binary_op);
-template<class InputIterator, class OutputIterator, class BinaryOperation, class T>
-  constexpr OutputIterator inclusive_scan(InputIterator first, InputIterator last,
+template&lt;class InputIterator, class OutputIterator, class BinaryOperation, class T&gt;
+  <ins>constexpr</ins> OutputIterator inclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
                                           BinaryOperation binary_op, T init);
-```
-```
-template<class InputIterator, class OutputIterator, class T,
-class BinaryOperation, class UnaryOperation>
-  constexpr OutputIterator transform_exclusive_scan(InputIterator first, InputIterator last,
+</pre>
+
+<pre>
+template&lt;class InputIterator, class OutputIterator, class T,
+         class BinaryOperation, class UnaryOperation&gt;
+  <ins>constexpr</ins> OutputIterator transform_exclusive_scan(InputIterator first, InputIterator last,
                                                     OutputIterator result,
                                                     T init,
                                                     BinaryOperation binary_op,
                                                     UnaryOperation unary_op);
-```
-```
-template<class InputIterator, class OutputIterator,
-         class BinaryOperation, class UnaryOperation>
-  constexpr OutputIterator transform_inclusive_scan(InputIterator first, InputIterator last,
+</pre>
+
+<pre>
+template&lt;class InputIterator, class OutputIterator,
+         class BinaryOperation, class UnaryOperation&gt;
+  <ins>constexpr</ins> OutputIterator transform_inclusive_scan(InputIterator first, InputIterator last,
                                                     OutputIterator result,
                                                     BinaryOperation binary_op,
                                                     UnaryOperation unary_op);
-template<class InputIterator, class OutputIterator,
-         class BinaryOperation, class UnaryOperation, class T>
-  constexpr OutputIterator transform_inclusive_scan(InputIterator first, InputIterator last,
+template&lt;class InputIterator, class OutputIterator,
+         class BinaryOperation, class UnaryOperation, class T&gt;
+  <ins>constexpr</ins> OutputIterator transform_inclusive_scan(InputIterator first, InputIterator last,
                                                     OutputIterator result,
                                                     BinaryOperation binary_op,
                                                     UnaryOperation unary_op,
                                                     T init);
-```
-```
-template<class InputIterator, class OutputIterator>
-  constexpr OutputIterator adjacent_difference(InputIterator first,
+</pre>
+
+<pre>
+template&lt;class InputIterator, class OutputIterator&gt;
+  <ins>constexpr</ins> OutputIterator adjacent_difference(InputIterator first,
                                                InputIterator last,
                                                OutputIterator result);
-template<class InputIterator, class OutputIterator, class BinaryOperation>
-  constexpr OutputIterator adjacent_difference(InputIterator first,
+template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
+  <ins>constexpr</ins> OutputIterator adjacent_difference(InputIterator first,
                                                InputIterator last,
                                                OutputIterator result,
                                                BinaryOperation binary_op);
-```
-```
-template<class ForwardIterator, class T>
-  constexpr void iota(ForwardIterator first, ForwardIterator last, T value);
-```
+</pre>
+
+<pre>
+template&lt;class ForwardIterator, class T&gt;
+  <ins>constexpr</ins> void iota(ForwardIterator first, ForwardIterator last, T value);
+</pre>
 
 - Change *Accumulate*, 25.9.2 [accumulate] as the synopsis.
 - Change *Reduce*, 25.9.3 [reduce] as the synopsis.
