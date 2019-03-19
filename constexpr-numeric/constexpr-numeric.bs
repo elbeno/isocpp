@@ -213,3 +213,12 @@ template<class ForwardIterator, class T>
 - Change *Transform inclusive scan*, 25.9.10 [transform.inclusive.scan] as the synopsis.
 - Change *Adjacent difference*, 25.9.11 [adjacent.difference] as the synopsis.
 - Change *Iota*, 25.9.12 [iota] as the synopsis.
+
+# Feature testing macro # {#featuretesting}
+
+As recommended in [[P0879]], for the purposes of SG10, the feature-testing macro
+`__cpp_lib_constexpr_swap_algorithms` is recommended.
+
+# Thanks # {#thanks}
+
+Thanks to Jan Wilmans for useful feedback.
