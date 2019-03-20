@@ -1230,7 +1230,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 8ac92da89bb2253e0da87e20a9b9caa745f5f5b6" name="generator">
   <link href="https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html" rel="canonical">
   <link href="https://isocpp.org/favicon.ico" rel="icon">
-  <meta content="6a746b92cbaaa0d162f25f192a1eaa0303bc0597" name="document-revision">
+  <meta content="3c800b0aee2ae332f5240f14867c0c1cf73aec29" name="document-revision">
 <style>
 .ins, ins, ins *, span.ins, span.ins * {
   background-color: rgb(200, 250, 200);
@@ -1499,7 +1499,7 @@ pre .property::before, pre .property::after {
 algorithms be <code class="highlight"><c- k>constexpr</c-></code>. However, there are algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that
 have been overlooked.</p>
    <h2 class="heading settled" data-level="2" id="assumptions"><span class="secno">2. </span><span class="content">Assumptions</span><a class="self-link" href="#assumptions"></a></h2>
-   <p>This proposal makes the same assumptions as <a data-link-type="biblio" href="#biblio-p0879">[P0879]</a>, <em>viz.</em>:</p>
+   <p><a data-link-type="biblio" href="#biblio-p0879">[P0879]</a> made the following assumptions:</p>
    <ul>
     <li data-md>
      <p>if an algorithm uses compiler intrinsics, then those intrinsics could be made <code class="highlight"><c- k>constexpr</c-></code> by compiler vendors.</p>
@@ -1508,6 +1508,7 @@ have been overlooked.</p>
     <li data-md>
      <p>if an algorithm uses external functions, then those functions could be made <code class="highlight"><c- kr>inline</c-></code> and marked <code class="highlight"><c- k>constexpr</c-></code> or could be replaced with intrinsics.</p>
    </ul>
+   <p>This proposal could make the same assumptions about implementation; however with the advent of <code class="highlight"><c- n>std</c-><c- o>::</c-><c- n>is_constant_evaluated</c-></code> for distinguishing compile-time and runtime code, perhaps these assumptions are no longer necessary.</p>
    <h2 class="heading settled" data-level="3" id="overlooked"><span class="secno">3. </span><span class="content">Algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that were apparently overlooked</span><a class="self-link" href="#overlooked"></a></h2>
    <p>This proposal is to add <code class="highlight"><c- k>constexpr</c-></code> to the following function templates in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code>, excepting the function templates that accept an <code class="highlight"><c- n>ExecutionPolicy</c-></code>.</p>
    <ul>

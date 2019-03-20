@@ -54,11 +54,13 @@ have been overlooked.
 
 # Assumptions # {#assumptions}
 
-This proposal makes the same assumptions as [[P0879]], *viz.*:
+[[P0879]] made the following assumptions:
 
 - if an algorithm uses compiler intrinsics, then those intrinsics could be made `constexpr` by compiler vendors.
 - if an algorithm uses assembly optimization, then that assembly could be turned into a `constexpr` compiler intrinsic.
 - if an algorithm uses external functions, then those functions could be made `inline` and marked `constexpr` or could be replaced with intrinsics.
+
+This proposal could make the same assumptions about implementation; however with the advent of `std::is_constant_evaluated` for distinguishing compile-time and runtime code, perhaps these assumptions are no longer necessary.
 
 # Algorithms in `<numeric>` that were apparently overlooked # {#overlooked}
 
