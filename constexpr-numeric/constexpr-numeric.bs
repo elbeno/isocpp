@@ -77,7 +77,6 @@ This proposal is to add `constexpr` to the following function templates in `<num
 - `transform_exclusive_scan`
 - `transform_inclusive_scan`
 - `adjacent_difference`
-- `iota`
 
 # Proposed wording relative to N4810 # {#wording}
 
