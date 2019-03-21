@@ -37,6 +37,10 @@ Abstract: We have made many algorithms <code>constexpr</code> for C++20, but we 
   text-decoration: line-through;
   text-decoration-color: rgb(255, 0, 0);
 }
+
+tt {
+  font-family: Courier New
+}
 </style>
 
 # Motivation # {#motivation}
@@ -78,32 +82,36 @@ This proposal is to add `constexpr` to the following function templates in `<num
 - `adjacent_difference`
 - `iota`
 
+# Feature testing macro # {#featuretesting}
+
+[[P0879]] recommends the feature-testing macro `__cpp_lib_constexpr_swap_algorithms`. Because algorithms in `<numeric>` are so commonly overlooked (the probable reason this paper exists) and assumed to be of a piece with those in `<algorithm>`, the path of least surprise is to use the same feature-testing macro for this proposal.
+
 # Proposed wording relative to N4810 # {#wording}
 
 Exactly as one would expect: add `constexpr` to the function templates listed above where they do not accept an `ExecutionPolicy`.
 
 
-- Change *Header* <tt>&lt;numeric&gt;</tt> *synopsis*, 25.8 [numeric.ops.overview] as indicated:
+- Change **25.8 Header** <tt>&lt;numeric&gt;</tt> **synopsis** [**numeric.ops.overview**] as indicated:
 
 <pre>
-template&lt;class InputIterator, class T&gt;
+<tt>template&lt;class InputIterator, class T&gt;
   <ins>constexpr</ins> T accumulate(InputIterator first, InputIterator last, T init);
 template&lt;class InputIterator, class T, class BinaryOperation&gt;
-  <ins>constexpr</ins> T accumulate(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
+  <ins>constexpr</ins> T accumulate(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator&gt;
+<tt>template&lt;class InputIterator&gt;
   <ins>constexpr</ins> typename iterator_traits<InputIterator>::value_type
     reduce(InputIterator first, InputIterator last);
 template&lt;class InputIterator, class T&gt;
   <ins>constexpr</ins> T reduce(InputIterator first, InputIterator last, T init);
 template&lt;class InputIterator, class T, class BinaryOperation&gt;
-  <ins>constexpr</ins> T reduce(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);
+  <ins>constexpr</ins> T reduce(InputIterator first, InputIterator last, T init, BinaryOperation binary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator1, class InputIterator2, class T&gt;
+<tt>template&lt;class InputIterator1, class InputIterator2, class T&gt;
   <ins>constexpr</ins> T inner_product(InputIterator1 first1, InputIterator1 last1,
                             InputIterator2 first2, T init);
 template&lt;class InputIterator1, class InputIterator2, class T,
@@ -111,11 +119,11 @@ template&lt;class InputIterator1, class InputIterator2, class T,
   <ins>constexpr</ins> T inner_product(InputIterator1 first1, InputIterator1 last1,
                             InputIterator2 first2, T init,
                             BinaryOperation1 binary_op1,
-                            BinaryOperation2 binary_op2);
+                            BinaryOperation2 binary_op2);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator1, class InputIterator2, class T&gt;
+<tt>template&lt;class InputIterator1, class InputIterator2, class T&gt;
   <ins>constexpr</ins> T transform_reduce(InputIterator1 first1, InputIterator1 last1,
                                InputIterator2 first2,
                                T init);
@@ -130,11 +138,11 @@ template&lt;class InputIterator, class T,
          class BinaryOperation, class UnaryOperation&gt;
   <ins>constexpr</ins> T transform_reduce(InputIterator first, InputIterator last,
                                T init,
-                               BinaryOperation binary_op, UnaryOperation unary_op);
+                               BinaryOperation binary_op, UnaryOperation unary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator, class OutputIterator&gt;
+<tt>template&lt;class InputIterator, class OutputIterator&gt;
   <ins>constexpr</ins> OutputIterator partial_sum(InputIterator first,
                                        InputIterator last,
                                        OutputIterator result);
@@ -142,22 +150,22 @@ template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
   <ins>constexpr</ins> OutputIterator partial_sum(InputIterator first,
                                        InputIterator last,
                                        OutputIterator result,
-                                       BinaryOperation binary_op);
+                                       BinaryOperation binary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator, class OutputIterator, class T&gt;
+<tt>template&lt;class InputIterator, class OutputIterator, class T&gt;
   <ins>constexpr</ins> OutputIterator exclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
                                           T init);
 template&lt;class InputIterator, class OutputIterator, class T, class BinaryOperation&gt;
   <ins>constexpr</ins> OutputIterator exclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
-                                          T init, BinaryOperation binary_op);
+                                          T init, BinaryOperation binary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator, class OutputIterator&gt;
+<tt>template&lt;class InputIterator, class OutputIterator&gt;
   <ins>constexpr</ins> OutputIterator inclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result);
 template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
@@ -167,21 +175,21 @@ template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
 template&lt;class InputIterator, class OutputIterator, class BinaryOperation, class T&gt;
   <ins>constexpr</ins> OutputIterator inclusive_scan(InputIterator first, InputIterator last,
                                           OutputIterator result,
-                                          BinaryOperation binary_op, T init);
+                                          BinaryOperation binary_op, T init);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator, class OutputIterator, class T,
+<tt>template&lt;class InputIterator, class OutputIterator, class T,
          class BinaryOperation, class UnaryOperation&gt;
   <ins>constexpr</ins> OutputIterator transform_exclusive_scan(InputIterator first, InputIterator last,
                                                     OutputIterator result,
                                                     T init,
                                                     BinaryOperation binary_op,
-                                                    UnaryOperation unary_op);
+                                                    UnaryOperation unary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator, class OutputIterator,
+<tt>template&lt;class InputIterator, class OutputIterator,
          class BinaryOperation, class UnaryOperation&gt;
   <ins>constexpr</ins> OutputIterator transform_inclusive_scan(InputIterator first, InputIterator last,
                                                     OutputIterator result,
@@ -193,11 +201,11 @@ template&lt;class InputIterator, class OutputIterator,
                                                     OutputIterator result,
                                                     BinaryOperation binary_op,
                                                     UnaryOperation unary_op,
-                                                    T init);
+                                                    T init);</tt>
 </pre>
 
 <pre>
-template&lt;class InputIterator, class OutputIterator&gt;
+<tt>template&lt;class InputIterator, class OutputIterator&gt;
   <ins>constexpr</ins> OutputIterator adjacent_difference(InputIterator first,
                                                InputIterator last,
                                                OutputIterator result);
@@ -205,30 +213,39 @@ template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
   <ins>constexpr</ins> OutputIterator adjacent_difference(InputIterator first,
                                                InputIterator last,
                                                OutputIterator result,
-                                               BinaryOperation binary_op);
+                                               BinaryOperation binary_op);</tt>
 </pre>
 
 <pre>
-template&lt;class ForwardIterator, class T&gt;
-  <ins>constexpr</ins> void iota(ForwardIterator first, ForwardIterator last, T value);
+<tt>template&lt;class ForwardIterator, class T&gt;
+  <ins>constexpr</ins> void iota(ForwardIterator first, ForwardIterator last, T value);</tt>
 </pre>
 
-- Change *Accumulate*, 25.9.2 [accumulate] as the synopsis.
-- Change *Reduce*, 25.9.3 [reduce] as the synopsis.
-- Change *Inner product*, 25.9.4 [inner.product] as the synopsis.
-- Change *Transform reduce*, 25.9.5 [transform.reduce] as the synopsis.
-- Change *Partial sum*, 25.9.6 [partial.sum] as the synopsis.
-- Change *Exclusive scan*, 25.9.7 [exclusive.scan] as the synopsis.
-- Change *Inclusive scan*, 25.9.8 [inclusive.scan] as the synopsis.
-- Change *Transform exclusive scan*, 25.9.9 [transform.exclusive.scan] as the synopsis.
-- Change *Transform inclusive scan*, 25.9.10 [transform.inclusive.scan] as the synopsis.
-- Change *Adjacent difference*, 25.9.11 [adjacent.difference] as the synopsis.
-- Change *Iota*, 25.9.12 [iota] as the synopsis.
+- Change **25.9.2 Accumulate** [**accumulate**] as the synopsis.
+- Change **25.9.3 Reduce** [**reduce**] as the synopsis.
+- Change **25.9.4 Inner product** [**inner.product**] as the synopsis.
+- Change **25.9.5 Transform reduce** [**transform.reduce**] as the synopsis.
+- Change **25.9.6 Partial sum** [**partial.sum**] as the synopsis.
+- Change **25.9.7 Exclusive scan** [**exclusive.scan**] as the synopsis.
+- Change **25.9.8 Inclusive scan** [**inclusive.scan**] as the synopsis.
+- Change **25.9.9 Transform exclusive scan** [**transform.exclusive.scan**] as the synopsis.
+- Change **25.9.10 Transform inclusive scan** [**transform.inclusive.scan**] as the synopsis.
+- Change **25.9.11 Adjacent difference** [**adjacent.difference**] as the synopsis.
+- Change **25.9.12 Iota** [**iota**] as the synopsis.
 
-# Feature testing macro # {#featuretesting}
+The feature-testing macro should also be updated.
 
-As recommended in [[P0879]], for the purposes of SG10, the feature-testing macro
-`__cpp_lib_constexpr_swap_algorithms` is recommended.
+- Change Table 36, **17.3.1 General** [**support.limits.general**]/3 as indicated:
+
+<table border='1'>
+<tr> 
+<td width='55%'><tt>__cpp_lib_constexpr_swap_algorithms</tt></td>
+<td width='15%'><tt>201806L</tt></td>
+<td><tt>&lt;algorithm&gt; <ins>&lt;numeric&gt;</tt></td>
+</tr>
+</table>
+
+The value `201806L` may also be updated as noted in that section.
 
 # Thanks # {#thanks}
 

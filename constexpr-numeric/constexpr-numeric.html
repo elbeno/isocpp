@@ -1230,7 +1230,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 8ac92da89bb2253e0da87e20a9b9caa745f5f5b6" name="generator">
   <link href="https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html" rel="canonical">
   <link href="https://isocpp.org/favicon.ico" rel="icon">
-  <meta content="b517aba886ad0253558019a6648568c4112ee5c4" name="document-revision">
+  <meta content="2308c8b5e625c2a175d8baaec2627da418432231" name="document-revision">
 <style>
 .ins, ins, ins *, span.ins, span.ins * {
   background-color: rgb(200, 250, 200);
@@ -1243,6 +1243,10 @@ Possible extra rowspan handling
   color: rgb(255, 0, 0);
   text-decoration: line-through;
   text-decoration-color: rgb(255, 0, 0);
+}
+
+tt {
+  font-family: Courier New
 }
 </style>
 <style>/* style-md-lists */
@@ -1481,8 +1485,8 @@ pre .property::before, pre .property::after {
     <li><a href="#motivation"><span class="secno">1</span> <span class="content">Motivation</span></a>
     <li><a href="#assumptions"><span class="secno">2</span> <span class="content">Assumptions</span></a>
     <li><a href="#overlooked"><span class="secno">3</span> <span class="content">Algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> that were apparently overlooked</span></a>
-    <li><a href="#wording"><span class="secno">4</span> <span class="content">Proposed wording relative to N4810</span></a>
-    <li><a href="#featuretesting"><span class="secno">5</span> <span class="content">Feature testing macro</span></a>
+    <li><a href="#featuretesting"><span class="secno">4</span> <span class="content">Feature testing macro</span></a>
+    <li><a href="#wording"><span class="secno">5</span> <span class="content">Proposed wording relative to N4810</span></a>
     <li><a href="#thanks"><span class="secno">6</span> <span class="content">Thanks</span></a>
     <li>
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
@@ -1535,30 +1539,32 @@ have been overlooked.</p>
     <li data-md>
      <p><code class="highlight"><c- n>iota</c-></code></p>
    </ul>
-   <h2 class="heading settled" data-level="4" id="wording"><span class="secno">4. </span><span class="content">Proposed wording relative to N4810</span><a class="self-link" href="#wording"></a></h2>
+   <h2 class="heading settled" data-level="4" id="featuretesting"><span class="secno">4. </span><span class="content">Feature testing macro</span><a class="self-link" href="#featuretesting"></a></h2>
+   <p><a data-link-type="biblio" href="#biblio-p0879">[P0879]</a> recommends the feature-testing macro <code class="highlight"><c- n>__cpp_lib_constexpr_swap_algorithms</c-></code>. Because algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> are so commonly overlooked (the probable reason this paper exists) and assumed to be of a piece with those in <code class="highlight"><c- o>&lt;</c-><c- n>algorithm</c-><c- o>></c-></code>, the path of least surprise is to use the same feature-testing macro for this proposal.</p>
+   <h2 class="heading settled" data-level="5" id="wording"><span class="secno">5. </span><span class="content">Proposed wording relative to N4810</span><a class="self-link" href="#wording"></a></h2>
    <p>Exactly as one would expect: add <code class="highlight"><c- k>constexpr</c-></code> to the function templates listed above where they do not accept an <code class="highlight"><c- n>ExecutionPolicy</c-></code>.</p>
    <ul>
     <li data-md>
      <p>
-      Change <em>Header</em> 
+      Change <strong>25.8 Header</strong> 
       <tt>&lt;numeric></tt>
-       <em>synopsis</em>, 25.8 [numeric.ops.overview] as indicated:
+       <strong>synopsis</strong> [<strong>numeric.ops.overview</strong>] as indicated:
      </p>
    </ul>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>accumulate</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- k>typename</c-> <c- n>iterator_traits</c-><inputiterator><c- o>::</c-><c- n>value_type</c->
     <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
-  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
-</inputiterator></pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
+  <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c-></inputiterator></tt>
+</pre>
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>inner_product</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                             <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
@@ -1566,9 +1572,9 @@ have been overlooked.</p>
   <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>inner_product</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                             <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>,</c->
                             <c- n>BinaryOperation1</c-> <c- n>binary_op1</c-><c- p>,</c->
-                            <c- n>BinaryOperation2</c-> <c- n>binary_op2</c-><c- p>);</c->
+                            <c- n>BinaryOperation2</c-> <c- n>binary_op2</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator1</c-><c- p>,</c-> <c- k>class</c-> <c- nc>InputIterator2</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator1</c-> <c- n>first1</c-><c- p>,</c-> <c- n>InputIterator1</c-> <c- n>last1</c-><c- p>,</c->
                                <c- n>InputIterator2</c-> <c- n>first2</c-><c- p>,</c->
                                <c- n>T</c-> <c- n>init</c-><c- p>);</c->
@@ -1583,9 +1589,9 @@ have been overlooked.</p>
          <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>T</c-> <c- n>transform_reduce</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                <c- n>T</c-> <c- n>init</c-><c- p>,</c->
-                               <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c-> <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>);</c->
+                               <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c-> <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>partial_sum</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                        <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                        <c- n>OutputIterator</c-> <c- n>result</c-><c- p>);</c->
@@ -1593,18 +1599,18 @@ have been overlooked.</p>
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>partial_sum</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                        <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                        <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
-                                       <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
+                                       <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                           <c- n>T</c-> <c- n>init</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
-                                          <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
+                                          <c- n>T</c-> <c- n>init</c-><c- p>,</c-> <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>);</c->
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- o>></c->
@@ -1614,17 +1620,17 @@ have been overlooked.</p>
 <c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                           <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
-                                          <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c->
+                                          <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c-> <c- n>T</c-> <c- n>init</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>transform_exclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                     <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                                     <c- n>T</c-> <c- n>init</c-><c- p>,</c->
                                                     <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c->
-                                                    <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>);</c->
+                                                    <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- p>,</c->
          <c- k>class</c-> <c- nc>BinaryOperation</c-><c- p>,</c-> <c- k>class</c-> <c- nc>UnaryOperation</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>transform_inclusive_scan</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                     <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
@@ -1636,9 +1642,9 @@ have been overlooked.</p>
                                                     <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
                                                     <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>,</c->
                                                     <c- n>UnaryOperation</c-> <c- n>unary_op</c-><c- p>,</c->
-                                                    <c- n>T</c-> <c- n>init</c-><c- p>);</c->
+                                                    <c- n>T</c-> <c- n>init</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>InputIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>OutputIterator</c-><c- o>></c->
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>adjacent_difference</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                                <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                <c- n>OutputIterator</c-> <c- n>result</c-><c- p>);</c->
@@ -1646,37 +1652,54 @@ have been overlooked.</p>
   <ins><c- k>constexpr</c-></ins> <c- n>OutputIterator</c-> <c- n>adjacent_difference</c-><c- p>(</c-><c- n>InputIterator</c-> <c- n>first</c-><c- p>,</c->
                                                <c- n>InputIterator</c-> <c- n>last</c-><c- p>,</c->
                                                <c- n>OutputIterator</c-> <c- n>result</c-><c- p>,</c->
-                                               <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c->
+                                               <c- n>BinaryOperation</c-> <c- n>binary_op</c-><c- p>);</c-></tt>
 </pre>
-<pre class="highlight"><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>ForwardIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
-  <ins><c- k>constexpr</c-></ins> <c- b>void</c-> <c- n>iota</c-><c- p>(</c-><c- n>ForwardIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>ForwardIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>value</c-><c- p>);</c->
+<pre class="highlight"><tt><c- k>template</c-><c- o>&lt;</c-><c- k>class</c-> <c- nc>ForwardIterator</c-><c- p>,</c-> <c- k>class</c-> <c- nc>T</c-><c- o>></c->
+  <ins><c- k>constexpr</c-></ins> <c- b>void</c-> <c- n>iota</c-><c- p>(</c-><c- n>ForwardIterator</c-> <c- n>first</c-><c- p>,</c-> <c- n>ForwardIterator</c-> <c- n>last</c-><c- p>,</c-> <c- n>T</c-> <c- n>value</c-><c- p>);</c-></tt>
 </pre>
    <ul>
     <li data-md>
-     <p>Change <em>Accumulate</em>, 25.9.2 [accumulate] as the synopsis.</p>
+     <p>Change <strong>25.9.2 Accumulate</strong> [<strong>accumulate</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Reduce</em>, 25.9.3 [reduce] as the synopsis.</p>
+     <p>Change <strong>25.9.3 Reduce</strong> [<strong>reduce</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Inner product</em>, 25.9.4 [inner.product] as the synopsis.</p>
+     <p>Change <strong>25.9.4 Inner product</strong> [<strong>inner.product</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Transform reduce</em>, 25.9.5 [transform.reduce] as the synopsis.</p>
+     <p>Change <strong>25.9.5 Transform reduce</strong> [<strong>transform.reduce</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Partial sum</em>, 25.9.6 [partial.sum] as the synopsis.</p>
+     <p>Change <strong>25.9.6 Partial sum</strong> [<strong>partial.sum</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Exclusive scan</em>, 25.9.7 [exclusive.scan] as the synopsis.</p>
+     <p>Change <strong>25.9.7 Exclusive scan</strong> [<strong>exclusive.scan</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Inclusive scan</em>, 25.9.8 [inclusive.scan] as the synopsis.</p>
+     <p>Change <strong>25.9.8 Inclusive scan</strong> [<strong>inclusive.scan</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Transform exclusive scan</em>, 25.9.9 [transform.exclusive.scan] as the synopsis.</p>
+     <p>Change <strong>25.9.9 Transform exclusive scan</strong> [<strong>transform.exclusive.scan</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Transform inclusive scan</em>, 25.9.10 [transform.inclusive.scan] as the synopsis.</p>
+     <p>Change <strong>25.9.10 Transform inclusive scan</strong> [<strong>transform.inclusive.scan</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Adjacent difference</em>, 25.9.11 [adjacent.difference] as the synopsis.</p>
+     <p>Change <strong>25.9.11 Adjacent difference</strong> [<strong>adjacent.difference</strong>] as the synopsis.</p>
     <li data-md>
-     <p>Change <em>Iota</em>, 25.9.12 [iota] as the synopsis.</p>
+     <p>Change <strong>25.9.12 Iota</strong> [<strong>iota</strong>] as the synopsis.</p>
    </ul>
-   <h2 class="heading settled" data-level="5" id="featuretesting"><span class="secno">5. </span><span class="content">Feature testing macro</span><a class="self-link" href="#featuretesting"></a></h2>
-   <p>As recommended in <a data-link-type="biblio" href="#biblio-p0879">[P0879]</a>, for the purposes of SG10, the feature-testing macro <code class="highlight"><c- n>__cpp_lib_constexpr_swap_algorithms</c-></code> is recommended.</p>
+   <p>The feature-testing macro should also be updated.</p>
+   <ul>
+    <li data-md>
+     <p>Change Table 36, <strong>17.3.1 General</strong> [<strong>support.limits.general</strong>]/3 as indicated:</p>
+   </ul>
+   <table border="1">
+    <tbody>
+     <tr>
+      <td width="55%">
+       <tt>__cpp_lib_constexpr_swap_algorithms</tt>
+      <td width="15%">
+       <tt>201806L</tt>
+      <td>
+       <tt>
+        &lt;algorithm> 
+        <ins>&lt;numeric></ins>
+       </tt>
+   </table>
+   <p>The value <code class="highlight"><c- mi>201806L</c-></code> may also be updated as noted in that section.</p>
    <h2 class="heading settled" data-level="6" id="thanks"><span class="secno">6. </span><span class="content">Thanks</span><a class="self-link" href="#thanks"></a></h2>
    <p>Thanks to Jan Wilmans and Joe Loser.</p>
   </main>
