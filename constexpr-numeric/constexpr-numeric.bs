@@ -69,7 +69,6 @@ This proposal is to add `constexpr` to the following function templates in `<num
 - `accumulate`
 - `reduce`
 - `inner_product`
-- `iota`
 - `transform_reduce`
 - `partial_sum`
 - `exclusive_scan`
@@ -77,6 +76,7 @@ This proposal is to add `constexpr` to the following function templates in `<num
 - `transform_exclusive_scan`
 - `transform_inclusive_scan`
 - `adjacent_difference`
+- `iota`
 
 # Proposed wording relative to N4810 # {#wording}
 
