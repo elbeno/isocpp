@@ -232,4 +232,4 @@ As recommended in [[P0879]], for the purposes of SG10, the feature-testing macro
 
 # Thanks # {#thanks}
 
-Thanks to Jan Wilmans for useful feedback.
+Thanks to Jan Wilmans and Joe Loser.
