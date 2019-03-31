@@ -7,7 +7,7 @@ Revision: 0
 Date: 2019-03-17
 Editor: Ben Deane, ben at elbeno dot com
 Group: wg21
-Audience: LEWG
+Audience: LEWG, LWG
 Markup Shorthands: markdown yes
 Default Highlight: c++
 Abstract: We have made many algorithms <code>constexpr</code> for C++20, but we seem to have overlooked the algorithms in <code>&lt;numeric&gt;</code>.
@@ -249,4 +249,4 @@ The value `201806L` may also be updated as noted in that section.
 
 # Thanks # {#thanks}
 
-Thanks to Jan Wilmans and Joe Loser.
+Thanks to Jan Wilmans, Joe Loser and Casey Carter.
