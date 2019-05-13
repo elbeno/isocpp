@@ -1,8 +1,8 @@
 <pre class='metadata'>
-Title: constexpr for &lt;numeric&gt;
+Title: constexpr for &lt;numeric&gt; algorithms
 Status: D
 ED: https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html
-Shortname: Dxxx
+Shortname: D1645
 Revision: 0
 Date: 2019-03-17
 Editor: Ben Deane, ben at elbeno dot com
