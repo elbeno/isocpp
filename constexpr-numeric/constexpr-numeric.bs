@@ -4,7 +4,7 @@ Status: D
 ED: https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html
 Shortname: D1645
 Revision: 0
-Date: 2019-03-17
+Date: 2019-05-14
 Editor: Ben Deane, ben at elbeno dot com
 Group: wg21
 Audience: LEWG, LWG
@@ -84,7 +84,7 @@ This proposal is to add `constexpr` to the following function templates in `<num
 
 # Feature testing macro # {#featuretesting}
 
-[[P0879]] recommends the feature-testing macro `__cpp_lib_constexpr_swap_algorithms`. Because algorithms in `<numeric>` are so commonly overlooked (the probable reason this paper exists) and assumed to be of a piece with those in `<algorithm>`, the path of least surprise is to use the same feature-testing macro for this proposal.
+I propose the feature-testing macro `__cpp_lib_constexpr_numeric_algorithms` to identify the presence of these `constexpr` forms.
 
 # Proposed wording relative to N4810 # {#wording}
 
@@ -235,17 +235,15 @@ template&lt;class InputIterator, class OutputIterator, class BinaryOperation&gt;
 
 The feature-testing macro should also be updated.
 
-- Change Table 36, **17.3.1 General** [**support.limits.general**]/3 as indicated:
+- Add a line to Table 36, **17.3.1 General** [**support.limits.general**]/3 as indicated:
 
 <table border='1'>
 <tr> 
-<td width='55%'><tt>__cpp_lib_constexpr_swap_algorithms</tt></td>
-<td width='15%'><tt>201806L</tt></td>
-<td><tt>&lt;algorithm&gt; <ins>&lt;numeric&gt;</tt></td>
+<td width='55%'><tt><ins>__cpp_lib_constexpr_numeric_algorithms</ins></tt></td>
+<td width='15%'><tt>\[TBD]</tt></td>
+<td><tt><ins>&lt;numeric&gt;</tt></td>
 </tr>
 </table>
-
-The value `201806L` may also be updated as noted in that section.
 
 # Thanks # {#thanks}
 

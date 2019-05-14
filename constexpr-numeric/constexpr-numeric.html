@@ -1230,7 +1230,7 @@ Possible extra rowspan handling
   <meta content="Bikeshed version 8ac92da89bb2253e0da87e20a9b9caa745f5f5b6" name="generator">
   <link href="https://elbeno.github.io/isocpp/constexpr-numeric/constexpr-numeric.html" rel="canonical">
   <link href="https://isocpp.org/favicon.ico" rel="icon">
-  <meta content="d0029707200703c32d6f30a36946aa24f8e17756" name="document-revision">
+  <meta content="68026771216f66960e9da0ee349d8a1ff68aacb2" name="document-revision">
 <style>
 .ins, ins, ins *, span.ins, span.ins * {
   background-color: rgb(200, 250, 200);
@@ -1458,7 +1458,7 @@ pre .property::before, pre .property::after {
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">D1645R0<br>constexpr for &lt;numeric> algorithms</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Proposal, <time class="dt-updated" datetime="2019-03-17">2019-03-17</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Draft Proposal, <time class="dt-updated" datetime="2019-05-14">2019-05-14</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1540,7 +1540,7 @@ have been overlooked.</p>
      <p><code class="highlight"><c- n>iota</c-></code></p>
    </ul>
    <h2 class="heading settled" data-level="4" id="featuretesting"><span class="secno">4. </span><span class="content">Feature testing macro</span><a class="self-link" href="#featuretesting"></a></h2>
-   <p><a data-link-type="biblio" href="#biblio-p0879">[P0879]</a> recommends the feature-testing macro <code class="highlight"><c- n>__cpp_lib_constexpr_swap_algorithms</c-></code>. Because algorithms in <code class="highlight"><c- o>&lt;</c-><c- n>numeric</c-><c- o>></c-></code> are so commonly overlooked (the probable reason this paper exists) and assumed to be of a piece with those in <code class="highlight"><c- o>&lt;</c-><c- n>algorithm</c-><c- o>></c-></code>, the path of least surprise is to use the same feature-testing macro for this proposal.</p>
+   <p>I propose the feature-testing macro <code class="highlight"><c- n>__cpp_lib_constexpr_numeric_algorithms</c-></code> to identify the presence of these <code class="highlight"><c- k>constexpr</c-></code> forms.</p>
    <h2 class="heading settled" data-level="5" id="wording"><span class="secno">5. </span><span class="content">Proposed wording relative to N4810</span><a class="self-link" href="#wording"></a></h2>
    <p>Exactly as one would expect: add <code class="highlight"><c- k>constexpr</c-></code> to the function templates listed above where they do not accept an <code class="highlight"><c- n>ExecutionPolicy</c-></code>.</p>
    <ul>
@@ -1684,22 +1684,22 @@ have been overlooked.</p>
    <p>The feature-testing macro should also be updated.</p>
    <ul>
     <li data-md>
-     <p>Change Table 36, <strong>17.3.1 General</strong> [<strong>support.limits.general</strong>]/3 as indicated:</p>
+     <p>Add a line to Table 36, <strong>17.3.1 General</strong> [<strong>support.limits.general</strong>]/3 as indicated:</p>
    </ul>
    <table border="1">
     <tbody>
      <tr>
       <td width="55%">
-       <tt>__cpp_lib_constexpr_swap_algorithms</tt>
+       <tt>
+        <ins>__cpp_lib_constexpr_numeric_algorithms</ins>
+       </tt>
       <td width="15%">
-       <tt>201806L</tt>
+       <tt>[TBD]</tt>
       <td>
        <tt>
-        &lt;algorithm> 
         <ins>&lt;numeric></ins>
        </tt>
    </table>
-   <p>The value <code class="highlight"><c- mi>201806L</c-></code> may also be updated as noted in that section.</p>
    <h2 class="heading settled" data-level="6" id="thanks"><span class="secno">6. </span><span class="content">Thanks</span><a class="self-link" href="#thanks"></a></h2>
    <p>Thanks to Jan Wilmans, Joe Loser and Casey Carter.</p>
   </main>
