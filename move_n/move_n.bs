@@ -1,0 +1,114 @@
+<pre class='metadata'>
+Title: <code>move_n</code> and <code>move_if</code>
+Status: D
+ED: https://elbeno.github.io/isocpp/move_n/move_n.html
+Shortname: DXXXX
+Revision: 0
+Date: 2019-09-30
+Editor: Ben Deane, ben at elbeno dot com
+Group: wg21
+Audience: LEWG
+Markup Shorthands: markdown yes
+Default Highlight: c++
+Abstract: We have <code>copy_n</code> and <code>copy_if</code>; <code>move_n</code> and <code>move_if</code> would be good additions to the standard library.
+</pre>
+
+<pre class="biblio">
+{
+}
+</pre>
+
+<style>
+.ins, ins, ins *, span.ins, span.ins * {
+  background-color: rgb(200, 250, 200);
+  color: rgb(0, 136, 0);
+  text-decoration: none;
+}
+
+.del, del, del *, span.del, span.del * {
+  background-color: rgb(250, 200, 200);
+  color: rgb(255, 0, 0);
+  text-decoration: line-through;
+  text-decoration-color: rgb(255, 0, 0);
+}
+
+tt {
+  font-family: Courier New
+}
+</style>
+
+# Proposal # {#proposal}
+
+That we introduce the following overloads in `<algorithm>`:
+
+<pre>
+<tt>template &lt;class InputIterator, class Size, class OutputIterator&gt;
+constexpr std::pair&lt;OutputIterator, IntputIterator&gt; move_n(
+    InputIterator first, Size n, OutputIterator result);</tt>
+</pre>
+
+<pre>
+<tt>template &lt;class ExecutionPolicy, class ForwardIterator1, class Size, class ForwardIterator2&gt;
+std::pair&lt;ForwardIterator2, ForwardIterator1&gt; move_n(ExecutionPolicy&& exec, 
+    ForwardIterator1 first, Size n, ForwardIterator2 result);</tt>
+</pre>
+
+<pre>
+<tt>template &lt;class InputIterator, class OutputIterator, class Predicate&gt;
+constexpr OutputIterator move_if(
+    InputIterator first, InputIterator last, OutputIterator result, Predicate pred);</tt>
+</pre>
+
+<pre>
+<tt>template &lt;class ExecutionPolicy, class ForwardIterator1, class ForwardIterator2,
+          class Predicate&gt;
+ForwardIterator2 move_if(ExecutionPolicy&& exec, 
+    ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Predicate pred);</tt>
+</pre>
+
+TODO: <code>ranges::move_n</code>, <code>ranges::move_if</code>
+
+# Rationale # {#motivation}
+
+## `copy_n`'s awkward use with move-only-types
+
+`copy_n` and `copy_if` are both awkward to use with move-only types,
+necessitating the verbose use of `make_move_iterator` or similar. The ranges
+form of `copy_n` offers no help in this regard.
+
+## The unfortunate signature of `std::copy_n`
+
+The signature of `copy_n` is inadequate because it does not obey the Law of
+Useful Return:
+
+<pre>
+<tt>template &lt;class InputIterator, class Size, class OutputIterator&gt;
+constexpr OutputIterator copy_n(InputIterator first, Size n,
+                                OutputIterator result);</tt>
+</pre>
+
+A caller who passes in a bidirectional iterator may have to incur an O(n)
+operation to advance the iterator when `copy_n` has already computed the result
+of advancing `first` but has failed to return it. If the caller passes an input
+iterator, the situation is even worse: the iterator is lost.
+
+This is fixed somewhat with `ranges::copy_n` which returns a
+`copy_n_result<I,O>` containing both the input and output iterators. However,
+the ranges form of `copy_n` does not offer an overload allowing for
+parallelization with an `ExecutionPolicy`.
+
+## Easier use with non-move-only types
+
+Where `copy_n` suffers from a deficient interface and verbosity with move-only
+types, `move_n` offers a complete interface and less verbosity with
+non-move-only types: the behaviour of `copy_n` may be duplicated by passing a
+`const_iterator` to `move_n`, which is typically much terser than
+`make_move_iterator`.
+
+## Symmetry with other algorithms
+
+We have `move` and `move_backward` as move-only analogues of `copy` and
+`copy_backward`; it would make sense to users that `move_n` and `move_if` should
+be available as analogues of `copy_n` and `copy_if`. Teachability is easier with
+consistency and without crutches like `move_iterator`.
+
